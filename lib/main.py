@@ -27,9 +27,15 @@ def main():
     if usage is None:
         raise RuntimeError("No response from openrouter API")
     else:
+
+        if args.verbose:
+            # print the usage information
+                print(f"User prompt: {args.user_prompt}")
+                print(f"Prompt tokens: {usage.prompt_tokens}" )
+                print(f"Response tokens: {usage.completion_tokens}" )
+
+
         # print the usage information
-        print(f"Prompt tokens: {usage.prompt_tokens}" )
-        print(f"Response tokens: {usage.completion_tokens}" )
         # print the models response
         print(response.choices[0].message.content)
 
