@@ -21,7 +21,6 @@ def get_files_info(working_directory: str, directory: str = ".") -> str:
             for item in os.listdir(target_dir):
                 item_path = os.path.join(target_dir, item)
                 file_info += f"{read_file_info(item_path,item)}"
-            
             return output + file_info
     except Exception as e:
         return output + str(e)
