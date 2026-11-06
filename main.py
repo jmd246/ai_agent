@@ -31,6 +31,7 @@ def handle_response(message: ChatCompletionMessage,verbose : bool) -> None :
 
 def main():
     # set up the argument parser and parse the command line arguments
+    
     parser = Parser(data=None)
     args = parser.setup_argparse().parse_args()
     # create a list of messages to send to the OpenAI API
@@ -41,6 +42,8 @@ def main():
     client = OpenAI(
         base_url="https://openrouter.ai/api/v1", api_key=settings.openai_api_key
     )
+    print(f"portion of key used is {settings.openai_api_key[-4:]}")
+    # print the user id
     # send the messages to the OpenRouter API and get the response
     response = client.chat.completions.create(
         model="openrouter/free",
