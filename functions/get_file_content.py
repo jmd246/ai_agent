@@ -1,7 +1,24 @@
 import os
+from openai.types.chat import ChatCompletionToolParam
 
 MAX_CHARS: int = 10000
 
+get_file_content_schema : ChatCompletionToolParam = {
+    "type" : "function",
+    "function" : {
+        "name" : "get_file_content",
+        "description": "Reads the content of a specified file relative to the working directory, up to a maximum number of characters",
+        "parameters" : {
+            "type" : "object",
+            "properties" : {
+                "file_name" : {
+                    "type": "string",
+                    "description" : "File name to read content from, relative to the working directory",
+                },
+            },
+        },
+    }
+}
 
 def get_file_content(working_directory: str, file_name: str) -> tuple[str, bool]:
     try:

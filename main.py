@@ -2,22 +2,30 @@ from openai import OpenAI, api_key
 from config import settings
 from lib.util.parser import Parser
 from lib.prompts import system_prompt
+from lib.call_functions import call_function
 from openai.types.chat import ChatCompletionMessage, ChatCompletionMessageParam, ChatCompletionMessageFunctionToolCall
 from lib.call_functions import available_functions
 import json
-def handle_response(message: ChatCompletionMessage) -> None :
+import logging
+
+
+logging.basicConfig(level=logging.INFO,filename="openrouter.log", filemode="w")
+
+def handle_response(message: ChatCompletionMessage,verbose : bool) -> None :
     if message.tool_calls is None:
         print(message.content)
     else:
-
         # for now print name and args of each function
        for tool_call in message.tool_calls:
-            print(tool_call.type)
             if tool_call.type == "function":
                 function_args = json.loads(
                     tool_call.function.arguments or "{}"
                 )
                 print(f"Calling function: {tool_call.function.name}({function_args})")
+                result = call_function(tool_call, verbose)
+                if verbose:
+                    print(f"-> {result['content']}")
+                logging.info(f"Calling function: {tool_call.function.name}({function_args})")
 
     # check response for what function to call perofrm the call and return the results back to the llm
 
@@ -52,7 +60,7 @@ def main():
 
         # print the usage information
         # print the models response
-        handle_response(response.choices[0].message)
+        handle_response(response.choices[0].message, args.verbose)
 
 
 if __name__ == "__main__":

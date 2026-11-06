@@ -1,7 +1,30 @@
 import os
 import subprocess
 from sys import stderr
+from openai.types.chat import ChatCompletionToolParam
 
+run_python_schema: ChatCompletionToolParam = {
+    "type": "function",
+    "function": {
+        "name": "run_python_file",
+        "description": "Executes a specified Python file relative to the working directory, with optional arguments, and returns the output or error messages",
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "file_path": {
+                    "type": "string",
+                    "description": "Path to the Python file to execute, relative to the working directory",
+                },
+                "args": {
+                    "type": "array",
+                    "items": {"type": "string"},
+                    "description": "Optional list of arguments to pass to the Python file",
+                },
+            },
+            "required": ["file_path"],
+        },
+    },
+}
 
 def run_python_file(
     working_directory: str, file_path: str, args: list[str] | None = None
@@ -24,7 +47,7 @@ def run_python_file(
                 command.extend(args)
             # run the file
             completed_process = subprocess.run(
-                command, stdout=subprocess.PIPE, stderr=stderr, text=True, timeout=30
+                command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, timeout=30
             )
 
             if completed_process.returncode == 0:
