@@ -1,8 +1,8 @@
 # AI Agent Practice Project
 
-A small Python practice project for exploring how coding agents are built. It contains an OpenRouter-backed prompt CLI, filesystem and Python-execution helper functions intended for a restricted working directory, and a standalone arithmetic calculator.
+A small Python project for exploring coding-agent concepts. It combines an OpenRouter-backed command-line interface with filesystem and Python-execution tools, plus a standalone arithmetic calculator.
 
-> **Current state:** The CLI currently sends a prompt to OpenRouter and prints the model response. The helper functions are not yet connected to an agent/tool-calling loop, and the system prompt is a placeholder. This is a learning project, not a production-ready coding agent.
+> **Project status:** The CLI sends a prompt to OpenRouter and can dispatch tool calls returned by the model. It currently handles the initial response only; it does not send tool results back to the model for a follow-up response, so this is not yet a complete agent loop.
 
 ## Requirements
 
@@ -12,45 +12,47 @@ A small Python practice project for exploring how coding agents are built. It co
 
 ## Setup
 
-Clone the repository, enter its directory, install dependencies, and create a local `.env` file:
+Clone the repository, enter its directory, install dependencies, and add your API key to a local `.env` file:
 
 ```bash
 uv sync
 printf 'OPENAI_API_KEY=your_openrouter_api_key\n' > .env
 ```
 
-The application reads `OPENAI_API_KEY` from `.env`. Keep this secret out of source control.
+The application reads `OPENAI_API_KEY` from `.env`. Keep this secret out of source control. **Note:** the current CLI prints the final four characters of the configured key when it starts; avoid sharing terminal output or logs that may contain this value.
 
-## Run the prompt CLI
+## Run the AI CLI
 
-Pass the prompt as a positional argument; use `--verbose` to print token usage:
+Run `main.py` from the repository root and pass a prompt as a positional argument. Add `--verbose` to show token usage and tool output:
 
 ```bash
-uv run python lib/main.py "What is a coding agent?"
-uv run python lib/main.py --verbose "Explain this project"
+uv run python main.py "What is a coding agent?"
+uv run python main.py --verbose "List the files in the working directory"
 ```
 
-The CLI uses the OpenAI Python client with OpenRouter's API endpoint and the `openrouter/free` model route. Availability and the specific model serving that route are controlled by OpenRouter.
+The CLI uses the OpenAI Python client with OpenRouter's API endpoint and the `openrouter/free` model route. OpenRouter controls route availability and which model serves a request. The current tool dispatcher sets its working directory to `./calculator`, so the model's filesystem and Python tools operate there rather than across the repository.
 
-## Project components
+## Available tools and safety
 
-- `lib/` — CLI entry point, configuration, prompt, and argument parsing.
-- `functions/` — helpers to list files, read file contents, write files, and run Python files.
-- `calculator/` — a separate command-line arithmetic calculator and its tests.
-- `test/` — tests for the filesystem and Python-execution helpers.
+The model can request these helper operations:
 
-The helper functions accept a working-directory argument and are intended to limit operations to that directory. They are not a secure sandbox: in particular, running a Python file executes its code with the current user's permissions. Use only with trusted code and do not rely on these path checks as a security boundary.
+- `get_files_info` — list entries in a directory.
+- `get_file_content` — read a file, up to 10,000 characters.
+- `write_file` — write a file and create parent directories as needed.
+- `run_python_file` — execute a Python file, with optional arguments and a 30-second timeout.
+
+The helpers are intended to constrain paths to their working directory, but they are **not a secure sandbox**. In particular, executing a Python file runs its code with the current user's permissions. Only run this project and its tools with code and files you trust.
 
 ## Calculator
 
-Run an arithmetic expression from the calculator directory:
+The calculator is a separate command-line program. Run it from its directory with an arithmetic expression in quotes:
 
 ```bash
 cd calculator
 python main.py "3 * 4 + 5"
 ```
 
-The result is printed as JSON. The calculator supports basic arithmetic expressions; see `calculator/tests.py` for examples.
+It prints the result as JSON. See `calculator/tests.py` for examples of supported expressions.
 
 ## Tests
 
@@ -65,6 +67,15 @@ Run the calculator tests:
 ```bash
 uv run python calculator/tests.py
 ```
+
+## Project layout
+
+- `main.py` — AI CLI entry point.
+- `config.py` — loads the OpenRouter API key from `.env`.
+- `lib/` — prompt, command-line argument parsing, and tool dispatch.
+- `functions/` — filesystem and Python-execution tool implementations.
+- `calculator/` — standalone calculator application and tests.
+- `test/` — tests for the helper functions.
 
 ## License
 
