@@ -26,6 +26,7 @@ run_python_schema: ChatCompletionToolParam = {
     },
 }
 
+
 def run_python_file(
     working_directory: str, file_path: str, args: list[str] | None = None
 ) -> str:
@@ -47,7 +48,11 @@ def run_python_file(
                 command.extend(args)
             # run the file
             completed_process = subprocess.run(
-                command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, timeout=30
+                command,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                text=True,
+                timeout=30,
             )
 
             if completed_process.returncode == 0:

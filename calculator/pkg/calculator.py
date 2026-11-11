@@ -1,5 +1,6 @@
 from collections.abc import Callable
 
+
 class Calculator:
     def __init__(self) -> None:
         self.operators: dict[str, Callable[[float, float], float]] = {

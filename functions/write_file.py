@@ -3,26 +3,28 @@ from openai.types.chat import ChatCompletionToolParam
 
 
 write_file_schema: ChatCompletionToolParam = {
-    "type" : "function",
-    "function" : {
-        "name" : "write_file",
+    "type": "function",
+    "function": {
+        "name": "write_file",
         "description": "Writes content to a specified file relative to the working directory, creating directories as needed, and returns a success or error message",
-        "parameters" : {
-            "type" : "object",
-            "properties" : {
-                "file_path" : {
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "file_path": {
                     "type": "string",
-                    "description" : "Path to the file to write to, relative to the working directory",
+                    "description": "Path to the file to write to, relative to the working directory",
                 },
-                "content" : {
+                "content": {
                     "type": "string",
-                    "description" : "Content to write to the file",
+                    "description": "Content to write to the file",
                 },
             },
-            "required" : ["file_path", "content"],
-        }
-    }
+            "required": ["file_path", "content"],
+        },
+    },
 }
+
+
 def write_file(working_directory: str, file_path: str, content: str) -> str:
     # if path is outisde working directory return err string
     abs_path = os.path.abspath(os.path.join(working_directory, file_path))
@@ -36,8 +38,6 @@ def write_file(working_directory: str, file_path: str, content: str) -> str:
             os.makedirs(os.path.dirname(abs_path), exist_ok=True)
             with open(abs_path, mode="w") as f:
                 f.write(content)
-            return (
-                f'Successfully wrote to "{file_path}" ({len(content)} characters written)'
-            )
+            return f'Successfully wrote to "{file_path}" ({len(content)} characters written)'
     except Exception as e:
         return f"Error: {str(e)}"
