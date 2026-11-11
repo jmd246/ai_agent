@@ -1,7 +1,4 @@
-# calculator/pkg/calculator.py
-
 from collections.abc import Callable
-
 
 class Calculator:
     def __init__(self) -> None:
@@ -14,8 +11,8 @@ class Calculator:
         self.precedence: dict[str, int] = {
             "+": 1,
             "-": 1,
-            "*": 2,
-            "/": 2,
+            "*": 3,
+            "/": 3,
         }
 
     def evaluate(self, expression: str) -> float | None:

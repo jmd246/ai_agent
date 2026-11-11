@@ -54,5 +54,5 @@ def call_function(tool_call, verbose: bool = False) -> dict:
         return {
             "role": "tool",
             "tool_call_id": id,
-            "content": result
+            "content": f"{result}",
         }
