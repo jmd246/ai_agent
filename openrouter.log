@@ -1,1 +1,10 @@
 INFO:httpx:HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:root:Calling function: get_files_info({})
+INFO:httpx:HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:root:Calling function: get_file_content({'file_name': 'main.py'})
+INFO:httpx:HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:root:Calling function: get_files_info({'directory': 'pkg'})
+INFO:root:Calling function: get_file_content({'file_name': 'main.py'})
+INFO:httpx:HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:root:Calling function: get_file_content({'file_name': 'pkg/render.py'})
+INFO:httpx:HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"

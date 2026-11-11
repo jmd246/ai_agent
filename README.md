@@ -114,6 +114,23 @@ This project is intentionally small and explicit. It is useful for learning:
 - how a tool layer can be injected around an LLM
 - how to keep a coding agent inside a working directory
 - how to build a toy agent loop without depending on a large framework
+## Future Improvements
+
+-- Fix harder and more complex bugs
+
+-- Refactor sections of code
+
+-- Add entirely new features
+
+# I can also try:
+
+-- Other LLM providers
+
+-- Other OpenRouter models (try pinning a specific :free model instead of openrouter/free)
+
+-- Giving it more functions to call
+
+-- Other codebases (commit your changes before running the agent on a codebase, so you can always revert)
 
 ## License
 
